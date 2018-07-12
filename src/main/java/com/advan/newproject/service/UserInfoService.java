@@ -1,5 +1,6 @@
 package com.advan.newproject.service;
 
+import com.advan.newproject.entity.DTO.PwdDTO;
 import com.advan.newproject.entity.DTO.UserInfoDTO;
 import com.advan.newproject.entity.Device;
 import com.advan.newproject.entity.UserInfo;
@@ -8,17 +9,20 @@ import com.advan.newproject.repository.UserInfoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 
 @Service
+@Transactional
 public class UserInfoService {
 
     @Autowired
     private UserInfoDao userInfoDao;
 
+    @Autowired
     private DeviceDao deviceDao;
 
     public UserInfoDTO login(String account, String password) throws Exception {
@@ -49,9 +53,6 @@ public class UserInfoService {
         userInfoDao.deleteById(userId);
     }
 
-    public void updateUser(UserInfo userInfo){
-        userInfoDao.save(userInfo);
-    }
 
     public List<UserInfoDTO> getAllUserInfo(){
         List<UserInfo> userInfoList = userInfoDao.getAll();
@@ -63,25 +64,44 @@ public class UserInfoService {
         return  userInfoDTOList;
     }
 
-//    public void addDeviceToUser(Long[] deviceIds, Long userId){
-//        Device device;
-//        UserInfo userInfo = userInfoDao.getUserInfoById(userId);
-//        List<Device> deviceList = userInfo.getDeviceList();
-//        for (int i = 0;i < deviceIds.length;i++){
-//            device = deviceDao.getDeviceByIdIs(deviceIds[i]);
-//            if (device != null) {
-//                deviceList.add(device);
-//            }
-//        }
-//        userInfoDao.save(userInfo);
-//    }
-//
-//    public void deteleDeviceFromUser(Long deviceId, Long userId){
-//        UserInfo userInfo = userInfoDao.getUserInfoById(userId);
-//        List<Device> deviceList = userInfo.getDeviceList();
-//        Device device = deviceDao.getDeviceByIdIs(deviceId);
-//
-//        deviceList.remove(device);
-//        userInfoDao.save(userInfo);
-//    }
+    public void updateUser (UserInfoDTO userInfo) {
+        UserInfo u = userInfoDao.getUserInfoById(userInfo.getUserId());
+        u.setAccount(userInfo.getAccount());
+        u.setUserName(userInfo.getUserName());
+
+        userInfoDao.save(u);
+    }
+
+    public void updateUserPwd(PwdDTO pwdDTO) {
+        UserInfo u = userInfoDao.getUserInfoById(pwdDTO.getUserId());
+        if (u.getPassword().equals(pwdDTO.getOldPassword())) {
+            u.setPassword(pwdDTO.getNewPassword());
+            userInfoDao.save(u);
+        }
+    }
+    public void addBinding(Long[] deviceIds, Long userId){
+        Device device;
+        UserInfo userInfo = userInfoDao.getUserInfoById(userId);
+        Set<Device> deviceList = userInfo.getDevices();
+        for (int i = 0;i < deviceIds.length;i++){
+            device = deviceDao.getDeviceByIdIs(deviceIds[i]);
+            if (device != null) {
+                deviceList.add(device);
+            }
+        }
+        userInfoDao.save(userInfo);
+    }
+
+    public void deleteBinding(Long[] deviceIds, Long userId){
+        Device device;
+        UserInfo userInfo = userInfoDao.getUserInfoById(userId);
+        Set<Device> deviceList = userInfo.getDevices();
+        for (int i = 0;i < deviceIds.length;i++){
+            device = deviceDao.getDeviceByIdIs(deviceIds[i]);
+            if (device != null) {
+                deviceList.remove(device);
+            }
+        }
+        userInfoDao.save(userInfo);
+    }
 }

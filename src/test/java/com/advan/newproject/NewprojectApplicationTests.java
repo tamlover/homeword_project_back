@@ -1,6 +1,7 @@
 package com.advan.newproject;
 
 import com.advan.newproject.entity.DTO.UserInfoDTO;
+import com.advan.newproject.service.DeviceService;
 import com.advan.newproject.service.UserInfoService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,9 @@ public class NewprojectApplicationTests {
     @Autowired
     private UserInfoService userInfoService;
 
+    @Autowired
+    private DeviceService deviceService;
+
     @Test
     public void contextLoads() {
     }
@@ -27,5 +31,21 @@ public class NewprojectApplicationTests {
         userInfoDTO = userInfoService.login("test","123");
         System.out.println(userInfoDTO.getAccount());
     }
+
+    @Test
+    public void testDelete () {
+        deviceService.deleteDevice((long)4);
+    }
+
+//    @Test
+//    public void deleteBinding () {
+//        userInfoService.deteleBinding((long)1,(long)1);
+//    }
+//
+//    @Test
+//    public void addBinding () {
+//        Long deviceIds[] = {(long)1,(long)2,(long)3};
+//        userInfoService.addDeviceToUser(deviceIds,(long)1);
+//    }
 
 }
