@@ -65,4 +65,20 @@ public class DeviceController {
         }
         return jsonObject.toJSONString();
     }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String addDevice (@RequestBody Device device) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            deviceService.addDevice(device);
+            jsonObject.put("Version","1.0");
+            jsonObject.put("ErrorCode","0");
+        }catch (Exception e){
+            jsonObject.put("Version", "1.0");
+            jsonObject.put("ErrorCode", "1");
+            jsonObject.put("ErrorMessage", e.getMessage());
+            e.printStackTrace();
+        }
+        return jsonObject.toJSONString();
+    }
 }

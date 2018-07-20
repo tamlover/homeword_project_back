@@ -50,6 +50,8 @@ public class UserInfoService {
     }
 
     public void deleteUser(Long userId){
+
+        userInfoDao.deleteBinding(userId) ;
         userInfoDao.deleteById(userId);
     }
 

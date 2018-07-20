@@ -115,7 +115,7 @@ public class UserInfoController {
         return jsonObject.toString();
     }
     @RequestMapping(method = RequestMethod.PUT,value = "pwd")
-    public String deleteBinding(@RequestBody PwdDTO pwdDTO){
+    public String updatePassword(@RequestBody PwdDTO pwdDTO){
         JSONObject jsonObject = new JSONObject();
         try{
             userInfoService.updateUserPwd(pwdDTO);
