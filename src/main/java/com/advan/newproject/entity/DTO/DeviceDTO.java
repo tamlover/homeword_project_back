@@ -1,19 +1,25 @@
-package com.advan.newproject.entity;
+package com.advan.newproject.entity.DTO;
 
-import javax.persistence.*;
-import java.util.Set;
+import com.advan.newproject.entity.Device;
 
-@Entity
-@Table
-public class Device {
+public class DeviceDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String deviceName;
     private String deviceNumber;
     private String deviceDetail;
+
+    public DeviceDTO () {
+
+    }
+
+    public DeviceDTO (Device device) {
+        this.id = device.getId();
+        this.deviceName = device.getDeviceName();
+        this.deviceDetail = device.getDeviceDetail();
+        this.deviceNumber = device.getDeviceNumber();
+    }
 
     public Long getId() {
         return id;
@@ -21,17 +27,6 @@ public class Device {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @ManyToMany(mappedBy = "devices")
-    private Set<UserInfo> UserInfos;
-
-    public Set<UserInfo> getUserInfos() {
-        return UserInfos;
-    }
-
-    public void setUserInfos(Set<UserInfo> userInfos) {
-        UserInfos = userInfos;
     }
 
     public String getDeviceName() {
@@ -57,5 +52,4 @@ public class Device {
     public void setDeviceDetail(String deviceDetail) {
         this.deviceDetail = deviceDetail;
     }
-
 }
